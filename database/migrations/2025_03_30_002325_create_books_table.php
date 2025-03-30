@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('isbn',13);
             $table->string('name',100);
             $table->integer('stock');
-            $table->decimal('price',10,2);
+            $table->decimal('book_price',10,2);
             $table->timestamps();
         });
     }

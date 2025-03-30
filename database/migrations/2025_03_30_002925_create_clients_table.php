@@ -38,6 +38,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+      Schema::dropIfExists('clients');
+      Schema::dropIfExists('client_doc_type');
     }
 };
