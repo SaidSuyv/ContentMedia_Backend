@@ -49,7 +49,7 @@ class BookController extends Controller
         return response()->json(["data"=>$found],Response::HTTP_OK);
     }
 
-    public function update(Request $request,$book)
+    public function update(Request $request, $book)
     {
         $rules = [
             "name" => [ 'required' , 'string' , 'max:20' ],
@@ -57,21 +57,8 @@ class BookController extends Controller
             "book_price" => [ 'required' , 'numeric' , 'min:0.1' ]
         ];
 
-        $fields = $request->validate( $rules );
+        $this->validate( $request , $rules );
 
-        $book = Book::where( "isbn" , $book )->first();
-        return response()->json(['data'=>$book],Response::HTTP_OK);
-
-        // if( $book != null )
-        // return response()->json(["data"=>"NIGGA WHAT? R U SERIOUS?"],Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        // $book->fill( $book );
-
-        // if( $book->isClean() )
-        //     return response()->json(["data"=>"NIGGA WHAT? R U SERIOUS?"],Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        // $book->save();
-
-        // return response()->json(['data'=>$book],Response::HTTP_OK);
+        return response()->json(["data"=>$request->all()],Response::HTTP_OK);
     }
 }
