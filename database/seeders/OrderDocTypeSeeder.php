@@ -14,7 +14,7 @@ class OrderDocTypeSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('order_doc_type')->insert([
+        DB::table('orders_doc_type')->insert([
             ["name"=>"Boleta"],
             ["name"=>"Factura"],
         ]);
