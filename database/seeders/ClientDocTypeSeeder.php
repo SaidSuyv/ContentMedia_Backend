@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ClientDocTypeSeeder extends Seeder
 {
@@ -14,10 +14,10 @@ class ClientDocTypeSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('client_doc_type')->insert([
-            ["name"=>"DNI"],
-            ["name"=>"RUC"],
-            ["name"=>"Carné de extranjería"]
+        DB::table('client_doc_types')->insert([
+            ["name"=>"DNI","digit_amount"=>8],
+            ["name"=>"RUC","digit_amount"=>11],
+            ["name"=>"Carné de extranjería","digit_amount"=>20]
         ]);
     }
 }

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
+    use ApiResponser;
+    
     public function generate_isbn()
     {
         $isbn = '';
@@ -22,7 +25,7 @@ class BookController extends Controller
     {
         $books = Book::all();
 
-        return response()->json(["data"=>$books],Response::HTTP_OK);
+        return $this->successResponse($books);
     }
 
     public function store(Request $request)
@@ -36,20 +39,22 @@ class BookController extends Controller
             "book_price" => [ 'required' , 'numeric' , 'min:0.1' ]
         ];
 
-        $data = $request->validate( $rules );
+        $this->validate( $request , $rules );
 
-        $book = Book::create( $data );
+        $book = Book::create( $request->all() );
 
-        return response()->json(["data"=>$book],Response::HTTP_OK);
+        return $this->successResponse($book);
     }
 
-    public function show($book)
+    public function show($isbn_or_name)
     {
-        $found = Book::where("isbn",$book)->first(); 
+        $found = Book::where("isbn",$isbn_or_name)->first();
+        if( !$found )
+            $found = Book::where("name",$isbn_or_name)->firstOrFail();
         return response()->json(["data"=>$found],Response::HTTP_OK);
     }
 
-    public function update(Request $request, $book)
+    public function update(Request $request, $isbn)
     {
         $rules = [
             "name" => [ 'required' , 'string' , 'max:20' ],
@@ -59,6 +64,24 @@ class BookController extends Controller
 
         $this->validate( $request , $rules );
 
-        return response()->json(["data"=>$request->all()],Response::HTTP_OK);
+        $book = Book::where("isbn",$isbn)->firstOrFail();
+
+        $book->fill( $request->all() );
+
+        if( $book->isClean() )
+            return $this->errorResponse("Al menos un valor debe ser cambiado",Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $book->save();
+
+        return $this->successResponse($book);
+    }
+
+    public function destroy($isbn)
+    {
+        $book = Book::where("isbn",$isbn)->firstOrFail();
+
+        $book->delete();
+
+        return $this->successResponse($book);
     }
 }

@@ -14,6 +14,6 @@ abstract class Controller
         $validated = Validator::make($request->all(),$rules);
 
         if( $validated->fails() )
-            throw new ValidationException($validated);
+            throw new ValidationException( $validated );
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class OrderDocTypeSeeder extends Seeder
 {
@@ -14,9 +14,9 @@ class OrderDocTypeSeeder extends Seeder
     public function run(): void
     {
         //
-        DB::table('orders_doc_type')->insert([
-            ["name"=>"Boleta"],
-            ["name"=>"Factura"],
+        DB::table('order_doc_types')->insert([
+            ["name"=>"Boleta","digit_amount"=>12],
+            ["name"=>"Factura","digit_amount"=>20],
         ]);
     }
 }

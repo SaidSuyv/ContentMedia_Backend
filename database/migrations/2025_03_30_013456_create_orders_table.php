@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders_doc_type', function (Blueprint $table) {
+        Schema::create('order_doc_types', function (Blueprint $table) {
           $table->id();
           $table->string('name',50);
+          $table->integer('digit_amount');
+          $table->timestamps();
         });
         Schema::create('orders', function (Blueprint $table) {
           $table->id();
@@ -23,10 +25,10 @@ return new class extends Migration
           $table->foreign("client_id")->references("id")->on("clients");
           // Link Order Doc Type ID
           $table->unsignedBigInteger("doc_type");
-          $table->foreign("doc_type")->references("id")->on("orders_doc_type");
+          $table->foreign("doc_type")->references("id")->on("order_doc_types");
 
           $table->decimal("total",10,2);
-          $table->string("doc_number",20);
+          $table->string("doc_number",20)->unique();
 
           $table->timestamps();
         });
@@ -38,6 +40,6 @@ return new class extends Migration
     public function down(): void
     {
       Schema::dropIfExists('orders');
-      Schema::dropIfExists('orders_doc_type');
+      Schema::dropIfExists('order_doc_types');
     }
 };

@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('client_doc_type', function (Blueprint $table) {
+        Schema::create('client_doc_types', function (Blueprint $table) {
             $table->id();
             $table->string('name',50);
+            $table->integer('digit_amount');
+            $table->timestamps();
         });
 
         Schema::create('clients', function (Blueprint $table) {
@@ -21,7 +23,7 @@ return new class extends Migration
             
             // Adjuntando Client Doc Type
             $table->unsignedBigInteger("doc_type");
-            $table->foreign("doc_type")->references('id')->on('client_doc_type');
+            $table->foreign("doc_type")->references('id')->on('client_doc_types');
 
             $table->string('doc_number',20);
             $table->string('first_name',50);
@@ -38,7 +40,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-      Schema::dropIfExists('clients');
-      Schema::dropIfExists('client_doc_type');
+        Schema::dropIfExists('clients');
+        Schema::dropIfExists('client_doc_types');
     }
 };
