@@ -46,12 +46,26 @@ class BookController extends Controller
         return $this->successResponse($book);
     }
 
-    public function show($isbn_or_name)
+    public function show($search)
     {
-        $found = Book::where("isbn",$isbn_or_name)->first();
+        $found = null;
+
+        switch( true )
+        {
+            case preg_match('/^\d{13}$/',$search):
+                $found = Book::where("isbn",$search)->firstOrFail();
+                break;
+            case preg_match('/^[a-zA-Z]+(?: [a-zA-Z]+){2}$/', $search):
+                $found = Book::where('name',$search)->firstOrFail();
+                break;
+            default:
+                throw new \Exception("Ambos valores son NULL");
+        }
+
         if( !$found )
-            $found = Book::where("name",$isbn_or_name)->firstOrFail();
-        return response()->json(["data"=>$found],Response::HTTP_OK);
+            throw new \Exception("Error encontrando libro");
+        
+        return $this->successResponse($found);
     }
 
     public function update(Request $request, $isbn)

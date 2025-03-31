@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\ApiResponser;
 use App\Models\OrdersDetail;
 use Illuminate\Http\Request;
@@ -18,6 +19,16 @@ class OrdersDetailController extends Controller
         "order_id.client_id.doc_type",
         "book_id"
     ];
+
+    protected function verify_book_stock(Request $request)
+    {
+        $book = Book::findOrFail( $request->get('book_id') );
+        $newStock = $book["stock"] - $request->get("quantity");
+        if( $newStock < 0 )
+            return true;
+        $book->update(["stock" => $newStock]);
+        return;
+    }
 
     /**
      * Get all Order Details
@@ -47,6 +58,9 @@ class OrdersDetailController extends Controller
         ];
 
         $this->validate( $request , $rules );
+
+        if( $this->verify_book_stock($request) )
+            return $this->errorResponse("El libro especificado no tiene suficiente stock",Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $OrdersDetail = OrdersDetail::create( $request->all() );
 
@@ -83,6 +97,9 @@ class OrdersDetailController extends Controller
         $this->validate( $request , $rules );
 
         $OrdersDetail = OrdersDetail::findOrFail( $detail );
+
+        if( $this->verify_book_stock($request) )
+            return $this->errorResponse("El libro especificado no tiene suficiente stock",Response::HTTP_NOT_MODIFIED);
 
         $OrdersDetail->fill( $request->all() );
 

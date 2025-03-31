@@ -76,7 +76,7 @@ class SaleController extends Controller
                 OrdersDetail::create($order_detail_data);
             }
             else
-                throw new \Exception("ISBN: $book->isbn -> no tiene suficiente stock");
+                return $this->errorResponse("ISBN: $book->isbn -> no tiene suficiente stock");
         }
 
         return $this->successResponse( true );

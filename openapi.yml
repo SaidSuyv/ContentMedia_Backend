@@ -1,0 +1,1485 @@
+openapi: '3.0.3'
+info:
+  title: BookStore_ContentMedia
+  version: '1.0.1'
+  contact:
+    email: sirsuyvi@gmail.com
+servers:
+  - url: https://127.0.0.1:8000
+paths:
+  /api/books:
+    get:
+      summary: Obtener libros
+      description: Regresa información sobre todos los libros
+      tags:
+        - Books
+      responses:
+        '200':
+          description: Lista de libros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/book'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    post:
+      summary: Crear un libro
+      description: Crear un libro con información requerida
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/book'
+      responses:
+        '200':
+          description: Libro creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/book'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /api/books/{name}:
+    get:
+      summary: Obtener un libro
+      description: Obtiene la información de un libro especificado
+      tags:
+        - Books
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Nombre del libro a consultar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Información del Libro a consulta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/book'
+        '404':
+          description: No se encontro el registro esperado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+  
+  /api/books/{isbn}:
+    get:
+      summary: Obtener un libro
+      description: Obtiene la información de un libro especificado
+      tags:
+        - Books
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          description: Código ISBN del libro a consultar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Información del Libro a consulta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/book'
+        '404':
+          description: No se ha enviado información correcta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+    
+    put:
+      summary: Actualizar Información de un libro
+      description: Actualizar información sobre un libro especificado
+      tags:
+        - Books
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          description: Código ISBN del libro a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - stock
+                - book_price
+              properties:
+                name:
+                  type: string
+                stock:
+                  type: integer
+                book_price:
+                  type: number
+      responses:
+        '200':
+          description: Operación exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/book'
+        '404':
+          description: No se ha enviado información correcta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '422':
+          description: No se ha enviado información correcta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+    
+    delete:
+      summary: Borrar un libro especificado
+      description: Borrar un libro con un codigo especificado
+      tags:
+        - Books
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          description: Código ISBN del libro a actualizar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El libro ha sido eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/book'
+        '404':
+          description: No se ha enviado información correcta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /clients/doctypes:
+    get:
+      summary: Obtener tipos de documentos
+      description: Regresa una lista de todos los tipos de documentos de clientes
+      tags:
+        - Clients
+        - ClientDocTypes
+      responses:
+        '200':
+          description: Lista de tipos de documentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/client_doc_type'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    post:
+      summary: Crear un nuevo tipo de documento
+      description: Crear un tipo de documento con la información proporcionada
+      tags:
+        - Clients
+        - ClientDocTypes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/client_doc_type'
+      responses:
+        '201':
+          description: Tipo de documento creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client_doc_type'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /clients/doctypes/{cdt}:
+    get:
+      summary: Obtener un tipo de documento específico
+      description: Obtiene la información de un tipo de documento especificado por su código
+      tags:
+        - Clients
+        - ClientDocTypes
+      parameters:
+        - name: cdt
+          in: path
+          required: true
+          description: Código del tipo de documento a consultar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Información del tipo de documento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/client_doc_type'
+        '404':
+          description: Tipo de documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    put:
+      summary: Actualizar tipo de documento
+      description: Actualiza la información de un tipo de documento específico
+      tags:
+        - Clients
+        - ClientDocTypes
+      parameters:
+        - name: cdt
+          in: path
+          required: true
+          description: Código del tipo de documento a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Tipo de documento actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client_doc_type'
+        '404':
+          description: Tipo de documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '422':
+          description: Información inválida o incompleta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    delete:
+      summary: Eliminar un tipo de documento
+      description: Elimina un tipo de documento específico por su código
+      tags:
+        - Clients
+        - ClientDocTypes
+      parameters:
+        - name: cdt
+          in: path
+          required: true
+          description: Código del tipo de documento a eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tipo de documento eliminado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client_doc_type'
+        '404':
+          description: Tipo de documento no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /orders/doctypes:
+    get:
+      summary: Obtener tipos de documentos de orden
+      description: Regresa una lista de todos los tipos de documentos de órdenes
+      tags:
+        - Orders
+        - OrdersDocTypes
+      responses:
+        '200':
+          description: Lista de tipos de documentos de orden
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order_doc_type'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    post:
+      summary: Crear un nuevo tipo de documento de orden
+      description: Crear un tipo de documento de orden con la información proporcionada
+      tags:
+        - Orders
+        - OrdersDocTypes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order_doc_type'
+      responses:
+        '201':
+          description: Tipo de documento de orden creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_doc_type'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /orders/doctypes/{cdt}:
+    get:
+      summary: Obtener un tipo de documento de orden específico
+      description: Obtiene la información de un tipo de documento de orden especificado por su código
+      tags:
+        - Orders
+        - OrdersDocTypes
+      parameters:
+        - name: cdt
+          in: path
+          required: true
+          description: Código del tipo de documento de orden a consultar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Información del tipo de documento de orden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/order_doc_type'
+        '404':
+          description: Tipo de documento de orden no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    put:
+      summary: Actualizar tipo de documento de orden
+      description: Actualiza la información de un tipo de documento de orden específico
+      tags:
+        - Orders
+        - OrdersDocTypes
+      parameters:
+        - name: cdt
+          in: path
+          required: true
+          description: Código del tipo de documento de orden a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Tipo de documento de orden actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_doc_type'
+        '404':
+          description: Tipo de documento de orden no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '422':
+          description: Información inválida o incompleta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    delete:
+      summary: Eliminar un tipo de documento de orden
+      description: Elimina un tipo de documento de orden específico por su código
+      tags:
+        - Orders
+        - OrdersDocTypes
+      parameters:
+        - name: cdt
+          in: path
+          required: true
+          description: Código del tipo de documento de orden a eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tipo de documento de orden eliminado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_doc_type'
+        '404':
+          description: Tipo de documento de orden no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /clients:
+    get:
+      summary: Obtener lista de clientes
+      description: Regresa una lista de todos los clientes
+      tags:
+        - Clients
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/client'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    post:
+      summary: Crear un nuevo cliente
+      description: Crear un cliente con la información proporcionada
+      tags:
+        - Clients
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/client'
+      responses:
+        '201':
+          description: Cliente creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /clients/{client}:
+    get:
+      summary: Obtener información de un cliente específico
+      description: Obtiene la información de un cliente especificado por su ID o código
+      tags:
+        - Clients
+      parameters:
+        - name: client
+          in: path
+          required: true
+          description: ID del cliente a consultar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Información del cliente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/client'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    put:
+      summary: Actualizar información de un cliente
+      description: Actualiza la información de un cliente específico por su ID
+      tags:
+        - Clients
+      parameters:
+        - name: client
+          in: path
+          required: true
+          description: ID del cliente a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+      responses:
+        '200':
+          description: Cliente actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '422':
+          description: Información inválida o incompleta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    delete:
+      summary: Eliminar un cliente
+      description: Elimina un cliente específico por su ID
+      tags:
+        - Clients
+      parameters:
+        - name: client
+          in: path
+          required: true
+          description: ID del cliente a eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente eliminado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/client'
+        '404':
+          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /orders:
+    get:
+      summary: Obtener lista de órdenes
+      description: Regresa una lista de todas las órdenes
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: Lista de órdenes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    post:
+      summary: Crear una nueva orden
+      description: Crear una orden con la información proporcionada
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order'
+      responses:
+        '201':
+          description: Orden creada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /orders/{order}:
+    get:
+      summary: Obtener información de una orden específica
+      description: Obtiene la información de una orden especificada por su ID
+      tags:
+        - Orders
+      parameters:
+        - name: order
+          in: path
+          required: true
+          description: ID de la orden a consultar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Información de la orden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/order'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    put:
+      summary: Actualizar información de una orden
+      description: Actualiza la información de una orden específica por su ID
+      tags:
+        - Orders
+      parameters:
+        - name: order
+          in: path
+          required: true
+          description: ID de la orden a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+                - total_amount
+              properties:
+                status:
+                  type: string
+                total_amount:
+                  type: number
+                customer_id:
+                  type: string
+      responses:
+        '200':
+          description: Orden actualizada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '422':
+          description: Información inválida o incompleta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    delete:
+      summary: Eliminar una orden
+      description: Elimina una orden específica por su ID
+      tags:
+        - Orders
+      parameters:
+        - name: order
+          in: path
+          required: true
+          description: ID de la orden a eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Orden eliminada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        '404':
+          description: Orden no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /details:
+    get:
+      summary: Obtener lista de detalles de órdenes
+      description: Regresa una lista de todos los detalles de las órdenes
+      tags:
+        - OrderDetails
+      responses:
+        '200':
+          description: Lista de detalles de órdenes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order_detail_extended'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    post:
+      summary: Crear un nuevo detalle de orden
+      description: Crear un nuevo detalle de orden con la información proporcionada
+      tags:
+        - OrderDetails
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order_detail'
+      responses:
+        '201':
+          description: Detalle de orden creado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_detail'
+        '422':
+          description: El libro no tiene suficiente stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /details/{detail_id}:
+    get:
+      summary: Obtener información de un detalle de orden específico
+      description: Obtiene la información de un detalle de orden especificado por su ID
+      tags:
+        - OrderDetails
+      parameters:
+        - name: detail_id
+          in: path
+          required: true
+          description: ID del detalle de orden a consultar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Información del detalle de orden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      schema:
+                        $ref: '#/components/schemas/order_detail'
+        '404':
+          description: Detalle de orden no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    put:
+      summary: Actualizar información de un detalle de orden
+      description: Actualiza la información de un detalle de orden específico por su ID
+      tags:
+        - OrderDetails
+      parameters:
+        - name: detail_id
+          in: path
+          required: true
+          description: ID del detalle de orden a actualizar
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - order_id
+                - product_id
+                - quantity
+                - price
+              properties:
+                order_id:
+                  type: string
+                product_id:
+                  type: string
+                quantity:
+                  type: integer
+                price:
+                  type: number
+      responses:
+        '200':
+          description: Detalle de orden actualizado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_detail'
+        '304':
+          description: Libro especificado no tiene suficiente stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '404':
+          description: Detalle de orden no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '422':
+          description: Información inválida o incompleta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+    delete:
+      summary: Eliminar un detalle de orden
+      description: Elimina un detalle de orden específico por su ID
+      tags:
+        - OrderDetails
+      parameters:
+        - name: detail_id
+          in: path
+          required: true
+          description: ID del detalle de orden a eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalle de orden eliminado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order_detail'
+        '404':
+          description: Detalle de orden no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+  /sale/generate:
+    post:
+      summary: Registrar una venta
+      description: Registra una venta con toda la información necesaria
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sale'
+      responses:
+        '201':
+          description: Orden creada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: boolean
+        '422':
+          description: Error de Validacion de Datos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorValidation'
+        '500':
+          description: Error Interno del Servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorGeneral'
+
+components:
+  schemas:
+    book:
+      required:
+        - name
+        - stock
+        - book_price
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        isbn:
+          type: string
+          example: 1234567891234
+        name:
+          type: string
+          example: Mi primer libro
+        stock:
+          type: integer
+          example: 10
+        book_price:
+          type: number
+          example: 10.5
+        created_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+        updated_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+    client:
+      required:
+        - doc_type
+        - doc_number
+        - first_name
+        - last_name
+        - phone
+        - email
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        doc_type:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+        doc_number:
+          type: string
+          example: 12345678
+        first_name:
+          type: string
+          example: Nunu
+        last_name:
+          type: string
+          example: Willump
+        phone:
+          type: string
+          example: 123456789
+        email:
+          type: string
+          example: example@example.com
+        created_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+        updated_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+    client_doc_type:
+      required:
+        - name
+        - digit_amount
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: DNI
+        digit_amount:
+          type: integer
+          example: 8
+    order:
+      required:
+        - client_id
+        - total
+        - doc_type
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        client_id:
+          type: integer
+          example: 1
+        doc_type:
+          type: integer
+          example: 1
+        total:
+          type: number
+          example: 10 | 5.99
+        doc_number:
+          type: string
+          example: 008246172499
+        created_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+        updated_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+    order_doc_type:
+      required:
+        - name
+        - digit_amount
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Boleta
+        digit_amount:
+          type: integer
+          example: 13
+    order_detail:
+      required:
+        - order_id
+        - book_id
+        - detail_price
+        - quantity
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        order_id:
+          type: integer
+          example: 1
+        book_id:
+          type: integer
+          example: 1
+        detail_price:
+          type: number
+          example: 2 | 0.99
+        quantity:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+        updated_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+    order_detail_extended:
+      required:
+        - order_id
+        - book_id
+        - detail_price
+        - quantity
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        order_id:
+          type: object
+          properties:
+            id:
+              type: integer
+            client_id:
+              type: object
+              properties:
+                id:
+                  type: integer
+                doc_type:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    digit_amount:
+                      type: integer
+                doc_number:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                created_at:
+                  type: string
+                  example: 2025-03-31T04:32:48.000000Z
+                updated_at:
+                  type: string
+                  example: 2025-03-31T04:32:48.000000Z
+            doc_type:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                digit_amount:
+                  type: integer
+                created_at:
+                  type: string
+                  example: 2025-03-31T04:32:48.000000Z
+                updated_at:
+                  type: string
+                  example: 2025-03-31T04:32:48.000000Z
+            total:
+              type: number
+            doc_number:
+              type: string
+            created_at:
+              type: string
+              example: 2025-03-31T04:32:48.000000Z
+            updated_at:
+              type: string
+              example: 2025-03-31T04:32:48.000000Z
+        book_id:
+          type: object
+          properties:
+            id:
+              type: integer
+            isbn:
+              type: string
+            name:
+              type: string
+            stock:
+              type: integer
+            book_price:
+              type: number
+            created_at:
+              type: string
+              example: 2025-03-31T04:32:48.000000Z
+            updated_at:
+              type: string
+              example: 2025-03-31T04:32:48.000000Z
+        detail_price:
+          type: number
+          example: 2 | 0.99
+        quantity:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+        updated_at:
+          type: string
+          example: 2025-03-31T04:32:48.000000Z
+    sale:
+      required:
+        - client
+        - order
+        - products
+      type: object
+      properties:
+        client:
+          required:
+            - doc_type
+            - doc_number
+            - first_name
+            - last_name
+            - phone
+            - email
+          type: object
+          properties:
+            doc_type:
+              type: integer
+              example: 1
+            doc_number:
+              type: integer
+              example: 12345678
+            first_name:
+              type: string
+              example: Nunu
+            last_name:
+              type: string
+              example: Willump
+            phone:
+              type: string
+              example: 123456789
+            email:
+              type: string
+              example: example@example.com
+        order:
+          required:
+            - total
+            - doc_type
+          type: object
+          properties:
+            total:
+              type: number
+              example: 10 | 5.99
+            doc_type:
+              type: integer
+              example: 1
+        products:
+          type: array
+          items:
+            required:
+              - book_id
+              - detail_price
+              - quantity
+            type: object
+            properties:
+              book_id:
+                type: integer
+                example: 1
+              detail_price:
+                type: number
+                example: 1 | 2.99
+              quantity:
+                type: integer
+                example: 3
+    ErrorGeneral:
+      type: object
+      properties:
+        message:
+          type: string
+    ErrorValidation:
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string

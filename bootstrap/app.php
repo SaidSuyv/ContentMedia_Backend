@@ -31,6 +31,6 @@ return Application::configure(basePath: dirname(__DIR__))
             if( $exception instanceof NotFoundHttpException )
                 return response()->json(["message"=>"No se ha encontrado el recurso solicitado"],Response::HTTP_NOT_FOUND);
 
-            return response()->json(["message"=>$exception->getMessage(),"class"=>get_class($exception)],400);
+            return response()->json(["message"=>$exception->getMessage()],Response::HTTP_INTERNAL_SERVER_ERROR);
         } );
     })->create();

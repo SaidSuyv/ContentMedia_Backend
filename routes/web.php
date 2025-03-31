@@ -15,6 +15,7 @@ Route::prefix('api')->group( function (){
   Route::controller( BookController::class )->group( function(){
     Route::get('/books',"index");
     Route::post('/books',"store");
+    Route::get('/books/{name}',"show");
     Route::get('/books/{isbn}',"show");
     Route::put('/books/{isbn}',"update");
     Route::delete('/books/{isbn}',"destroy");

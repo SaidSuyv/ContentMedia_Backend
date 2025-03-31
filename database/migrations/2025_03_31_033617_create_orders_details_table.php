@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign("order_id")->references("id")->on("orders");
             // Link Book ID
             $table->unsignedBigInteger("book_id");
-            $table->foreign("book_id")->references("id")->on("books");
+            $table->foreign("book_id")->references("id")->on("books")->onDelete("cascade");
             $table->decimal("detail_price",10,2);
             $table->integer("quantity");
             $table->timestamps();

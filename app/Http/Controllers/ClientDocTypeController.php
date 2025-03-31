@@ -31,7 +31,8 @@ class ClientDocTypeController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            "name" => 'required|string'
+            "name" => 'required|string',
+            "digit_amount" => 'required|integer|min:1'
         ];
 
         $this->validate( $request , $rules );
@@ -62,7 +63,10 @@ class ClientDocTypeController extends Controller
      */
     public function update(Request $request , $cdt)
     {
-        $rules = ["name"=>"required|string"];
+        $rules = [
+            "name"=> "required|string",
+            "digit_number" => 'required|integer'
+        ];
         $this->validate( $request , $rules );
 
         $cdt = ClientDocType::findOrFail( $cdt );
