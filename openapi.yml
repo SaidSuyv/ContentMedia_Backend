@@ -225,7 +225,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /clients/doctypes:
+  /api/clients/doctypes:
     get:
       summary: Obtener tipos de documentos
       description: Regresa una lista de todos los tipos de documentos de clientes
@@ -274,7 +274,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /clients/doctypes/{cdt}:
+  /api/clients/doctypes/{cdt}:
     get:
       summary: Obtener un tipo de documento específico
       description: Obtiene la información de un tipo de documento especificado por su código
@@ -400,7 +400,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /orders/doctypes:
+  /api/orders/doctypes:
     get:
       summary: Obtener tipos de documentos de orden
       description: Regresa una lista de todos los tipos de documentos de órdenes
@@ -449,7 +449,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /orders/doctypes/{cdt}:
+  /api/orders/doctypes/{cdt}:
     get:
       summary: Obtener un tipo de documento de orden específico
       description: Obtiene la información de un tipo de documento de orden especificado por su código
@@ -575,7 +575,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /clients:
+  /api/clients:
     get:
       summary: Obtener lista de clientes
       description: Regresa una lista de todos los clientes
@@ -622,7 +622,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /clients/{client}:
+  /api/clients/{client}:
     get:
       summary: Obtener información de un cliente específico
       description: Obtiene la información de un cliente especificado por su ID o código
@@ -749,7 +749,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /orders:
+  /api/orders:
     get:
       summary: Obtener lista de órdenes
       description: Regresa una lista de todas las órdenes
@@ -796,7 +796,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /orders/{order}:
+  /api/orders/{order}:
     get:
       summary: Obtener información de una orden específica
       description: Obtiene la información de una orden especificada por su ID
@@ -921,7 +921,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /details:
+  /api/details:
     get:
       summary: Obtener lista de detalles de órdenes
       description: Regresa una lista de todos los detalles de las órdenes
@@ -974,7 +974,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /details/{detail_id}:
+  /api/details/{detail_id}:
     get:
       summary: Obtener información de un detalle de orden específico
       description: Obtiene la información de un detalle de orden especificado por su ID
@@ -1109,7 +1109,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorGeneral'
 
-  /sale/generate:
+  /api/sale/generate:
     post:
       summary: Registrar una venta
       description: Registra una venta con toda la información necesaria
