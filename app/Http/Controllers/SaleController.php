@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\OrderDocType;
 use App\Models\OrdersDetail;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\ClientController;
 
 class SaleController extends Controller
@@ -69,14 +70,14 @@ class SaleController extends Controller
             // Decrease Book Quantity
             $book = Book::find( $order_detail_data["book_id"] );
             $newStock = $book["stock"] - $order_detail_data["quantity"];
-            if( $newStock > 0 )
+            if( $newStock >= 0 )
             {
                 $book->update(["stock"=>$newStock]);
                 $order_detail_data["order_id"] = $order["id"];
                 OrdersDetail::create($order_detail_data);
             }
             else
-                return $this->errorResponse("ISBN: $book->isbn -> no tiene suficiente stock");
+                return $this->errorResponse("ISBN: $book->isbn -> no tiene suficiente stock",Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return $this->successResponse( true );
